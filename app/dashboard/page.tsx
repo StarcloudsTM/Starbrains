@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Users, ShoppingCart, Package } from 'lucide-react'
 
 export default function DashboardHome() {
   return (
