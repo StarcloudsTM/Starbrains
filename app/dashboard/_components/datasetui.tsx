@@ -1,12 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { AlertCircle, Edit, Trash, Plus, Download, } from "lucide-react"
+import { AlertCircle, Edit, Trash, Plus, Download } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
 import {
@@ -44,11 +44,7 @@ export default function DatasetsPage() {
   const [datasetDescription, setDatasetDescription] = useState('')
   const [datasetFile, setDatasetFile] = useState<File | null>(null)
 
-  useEffect(() => {
-    fetchDatasets()
-  }, [])
-
-  const fetchDatasets = async () => {
+  const fetchDatasets = useCallback(async () => {
     try {
       const response = await fetch('/api/datasets')
       if (!response.ok) {
@@ -56,7 +52,7 @@ export default function DatasetsPage() {
       }
       const data = await response.json()
       setDatasets(data)
-    } catch (err) {
+    } catch (error) {
       setError('An error occurred while fetching datasets.')
       toast({
         title: "Error",
@@ -66,7 +62,11 @@ export default function DatasetsPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [toast])
+
+  useEffect(() => {
+    fetchDatasets()
+  }, [fetchDatasets])
 
   const handlePublish = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -103,8 +103,8 @@ export default function DatasetsPage() {
       })
       setIsPublishDialogOpen(false)
       resetForm()
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred'
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
       toast({
         title: "Error",
         description: `Failed to publish dataset: ${errorMessage}`,
@@ -142,8 +142,8 @@ export default function DatasetsPage() {
       })
       setIsEditDialogOpen(false)
       resetForm()
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred'
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
       toast({
         title: "Error",
         description: `Failed to update dataset: ${errorMessage}`,
@@ -170,8 +170,8 @@ export default function DatasetsPage() {
         title: "Success",
         description: "Dataset deleted successfully!",
       })
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred'
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
       toast({
         title: "Error",
         description: `Failed to delete dataset: ${errorMessage}`,
@@ -267,7 +267,6 @@ export default function DatasetsPage() {
       {isLoading ? (
         <div className="flex justify-center items-center h-64">Loading datasets...</div>
       ) : datasets.length === 0 ? (
-        
         <Card>
           <CardContent className="flex flex-col items-center justify-center h-64">
             <p className="text-xl font-semibold mb-4">No datasets available</p>

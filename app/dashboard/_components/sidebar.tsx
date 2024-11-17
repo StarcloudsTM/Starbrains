@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { Home, ShoppingBag, Settings, Menu, X,  } from 'lucide-react'
+import {  Menu, X,  } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export function Sidebar() {
@@ -34,8 +34,8 @@ export function Sidebar() {
           <Link href="/dashboard/projects" className="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
                         <span>Projects</span>
           </Link>
-          <Link href="/dashboard/upgrade" className="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
-                        <span>Upgrade</span>
+          <Link href="/dashboard/brains" className="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
+                        <span>Brains</span>
           </Link>
           <Link href="/dashboard/settings" className="flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100">
                         <span>Settings</span>

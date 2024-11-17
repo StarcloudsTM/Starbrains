@@ -1,12 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { AlertCircle, Edit, Trash, Plus, ExternalLink } from "lucide-react"
+import { AlertCircle, Edit, Trash, Plus, ExternalLink } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
 import {
@@ -44,11 +44,7 @@ export default function ProjectsPage() {
   const [projectDescription, setProjectDescription] = useState('')
   const [projectUrl, setProjectUrl] = useState('')
 
-  useEffect(() => {
-    fetchProjects()
-  }, [])
-
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const response = await fetch('/api/projects')
       if (!response.ok) {
@@ -56,7 +52,7 @@ export default function ProjectsPage() {
       }
       const data = await response.json()
       setProjects(data)
-    } catch (err) {
+    } catch (error) {
       setError('An error occurred while fetching projects.')
       toast({
         title: "Error",
@@ -66,7 +62,11 @@ export default function ProjectsPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [toast])
+
+  useEffect(() => {
+    fetchProjects()
+  }, [fetchProjects])
 
   const handlePublish = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -96,8 +96,8 @@ export default function ProjectsPage() {
       })
       setIsPublishDialogOpen(false)
       resetForm()
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred'
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
       toast({
         title: "Error",
         description: `Failed to publish project: ${errorMessage}`,
@@ -136,8 +136,8 @@ export default function ProjectsPage() {
       })
       setIsEditDialogOpen(false)
       resetForm()
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred'
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
       toast({
         title: "Error",
         description: `Failed to update project: ${errorMessage}`,
@@ -164,8 +164,8 @@ export default function ProjectsPage() {
         title: "Success",
         description: "Project deleted successfully!",
       })
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred'
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
       toast({
         title: "Error",
         description: `Failed to delete project: ${errorMessage}`,
@@ -294,7 +294,6 @@ export default function ProjectsPage() {
                   </a>
                 </Button>
                 {user && user.id === project.userId && (
-                
                   <div className="flex gap-2">
                     <Button
                       variant="outline"

@@ -15,6 +15,7 @@ interface AppCard {
   category: 'Backend' | 'ML'
 }
 
+
 const initialApps: AppCard[] = [
     {
       "id": "1",
@@ -305,74 +306,74 @@ const initialApps: AppCard[] = [
     }
   ]
 
-export default function BrainsPYPage() {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('All')
-  const [apps, setApps] = useState<AppCard[]>(initialApps)
-
-  const categories = ['All', 'Backend', 'ML']
-
-  const filteredApps = apps.filter(app =>
-    (selectedCategory === 'All' || app.category === selectedCategory) &&
-    (app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    app.description.toLowerCase().includes(searchTerm.toLowerCase()))
-  )
-
-  return (
-    <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold mb-6">BrainsPY: AI/ML/Python Apps</h1>
-      
-      <div className="mb-6 flex space-x-4">
-        <div className="relative flex-grow">
-          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <Input
-            type="text"
-            placeholder="Search apps..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
+  export default function BrainsPYPage() {
+    const [searchTerm, setSearchTerm] = useState('')
+    const [selectedCategory, setSelectedCategory] = useState('All')
+    const [apps] = useState<AppCard[]>(initialApps)
+  
+    const categories = ['All', 'Backend', 'ML']
+  
+    const filteredApps = apps.filter(app =>
+      (selectedCategory === 'All' || app.category === selectedCategory) &&
+      (app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      app.description.toLowerCase().includes(searchTerm.toLowerCase()))
+    )
+  
+    return (
+      <div className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        <h1 className="text-3xl font-bold mb-6">BrainsPY: AI/ML/Python Apps</h1>
+        
+        <div className="mb-6 flex space-x-4">
+          <div className="relative flex-grow">
+            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <Input
+              type="text"
+              placeholder="Search apps..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select category" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map((category) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
-        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select category" />
-          </SelectTrigger>
-          <SelectContent>
-            {categories.map((category) => (
-              <SelectItem key={category} value={category}>
-                {category}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredApps.map((app) => (
-          <Card key={app.id} className="flex flex-col">
-            <CardHeader>
-              <CardTitle>{app.name}</CardTitle>
-              <CardDescription>{app.description}</CardDescription>
-            </CardHeader>
-            <CardContent className="flex-grow">
-              <p className="text-sm text-muted-foreground">Category: {app.category}</p>
-            </CardContent>
-            <CardFooter>
-              <Button asChild className="w-full">
-                <a href={app.githubUrl} target="_blank" rel="noopener noreferrer">
-                  <Github className="mr-2 h-4 w-4" /> View on GitHub
-                </a>
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
-
-      {filteredApps.length === 0 && (
-        <div className="text-center mt-10">
-          <p className="text-xl font-semibold">No apps found matching your search.</p>
+  
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredApps.map((app) => (
+            <Card key={app.id} className="flex flex-col">
+              <CardHeader>
+                <CardTitle>{app.name}</CardTitle>
+                <CardDescription>{app.description}</CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <p className="text-sm text-muted-foreground">Category: {app.category}</p>
+              </CardContent>
+              <CardFooter>
+                <Button asChild className="w-full">
+                  <a href={app.githubUrl} target="_blank" rel="noopener noreferrer">
+                    <Github className="mr-2 h-4 w-4" /> View on GitHub
+                  </a>
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
         </div>
-      )}
-    </div>
-  )
-}
+  
+        {filteredApps.length === 0 && (
+          <div className="text-center mt-10">
+            <p className="text-xl font-semibold">No apps found matching your search.</p>
+          </div>
+        )}
+      </div>
+    )
+  }
