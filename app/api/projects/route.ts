@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import clientPromise from '@/lib/mongodb';
 
+
 export async function GET() {
   try {
     const client = await clientPromise;
@@ -60,9 +61,9 @@ export async function POST(req: NextRequest) {
     };
 
     const result = await db.collection("projects").insertOne(newProject);
-    newProject._id = result.insertedId;
+    const insertedProject = { ...newProject, _id: result.insertedId };
 
-    return NextResponse.json(newProject, { status: 201 });
+    return NextResponse.json(insertedProject, { status: 201 });
   } catch (error) {
     console.error("Error creating project:", error);
     return NextResponse.json(

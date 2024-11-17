@@ -34,7 +34,7 @@ export default function DatasetsPage() {
   const { user, isLoaded } = useUser()
   const [datasets, setDatasets] = useState<Dataset[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
   const { toast } = useToast()
 
   const [isPublishDialogOpen, setIsPublishDialogOpen] = useState(false)
@@ -53,7 +53,7 @@ export default function DatasetsPage() {
       const data = await response.json()
       setDatasets(data)
     } catch (error) {
-      setError('An error occurred while fetching datasets.')
+      setErrorMessage('An error occurred while fetching datasets.')
       toast({
         title: "Error",
         description: "Failed to fetch datasets. Please try again later.",
@@ -257,11 +257,11 @@ export default function DatasetsPage() {
           </Dialog>
         )}
       </div>
-      {error && (
+      {errorMessage && (
         <Alert variant="destructive" className="mb-6">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription>{errorMessage}</AlertDescription>
         </Alert>
       )}
       {isLoading ? (

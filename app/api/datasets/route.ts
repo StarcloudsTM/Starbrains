@@ -88,9 +88,9 @@ export async function POST(req: NextRequest) {
     };
 
     const result = await db.collection("datasets").insertOne(newDataset);
-    newDataset._id = result.insertedId;
+    const insertedDataset = { ...newDataset, _id: result.insertedId };
 
-    return NextResponse.json(newDataset, { status: 201 });
+    return NextResponse.json(insertedDataset, { status: 201 });
   } catch (error) {
     console.error("Error creating dataset:", error);
     return NextResponse.json(

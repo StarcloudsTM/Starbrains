@@ -34,7 +34,7 @@ export default function ProjectsPage() {
   const { user, isLoaded } = useUser()
   const [projects, setProjects] = useState<Project[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
   const { toast } = useToast()
 
   const [isPublishDialogOpen, setIsPublishDialogOpen] = useState(false)
@@ -53,7 +53,7 @@ export default function ProjectsPage() {
       const data = await response.json()
       setProjects(data)
     } catch (error) {
-      setError('An error occurred while fetching projects.')
+      setErrorMessage('An error occurred while fetching projects.')
       toast({
         title: "Error",
         description: "Failed to fetch projects. Please try again later.",
@@ -251,11 +251,11 @@ export default function ProjectsPage() {
           </Dialog>
         )}
       </div>
-      {error && (
+      {errorMessage && (
         <Alert variant="destructive" className="mb-6">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription>{errorMessage}</AlertDescription>
         </Alert>
       )}
       {isLoading ? (
